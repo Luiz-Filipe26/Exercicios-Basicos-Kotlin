@@ -1,35 +1,32 @@
-fun isValidCpf(cpf: String): Boolean {
-    // Regex para validar o formato do CPF
+fun cpfValido(cpf: String): Boolean {
     val regex = Regex("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")
     if (!regex.matches(cpf)) return false
 
-    // Remove caracteres de formatação e mantém apenas os dígitos
-    val digits = cpf.replace(".", "").replace("-", "")
+    val digitos = cpf.replace(".", "").replace("-", "")
 
-    // Verifica se todos os dígitos são iguais (ex: 111.111.111-11)
-    if (digits.all { it == digits[0] }) return false
+    if (digitos.all { it == digitos[0] }) return false
 
-    // Cálculo dos dígitos verificadores
-    val firstDigit = calculateDigit(digits, 10)
-    val secondDigit = calculateDigit(digits + firstDigit, 11)
+    val primeiroDigito = calcularDigitoVerificador(digitos.substring(0, 9))
+    val segundoDigito = calcularDigitoVerificador(digitos.substring(0, 9) + primeiroDigito)
 
-    // Valida os dígitos verificadores
-    return "$digits[9]$digits[10]" == "$firstDigit$secondDigit"
+    return "$primeiroDigito$segundoDigito" == "${digitos[9]}${digitos[10]}"
 }
 
-fun calculateDigit(digits: String, factor: Int): Int {
-    val sum = digits.take(9).mapIndexed { index, char ->
-        char.digitToInt() * (factor - index)
+fun calcularDigitoVerificador(digitos: String): Int {
+    val soma = digitos.mapIndexed { index, caractere ->
+        caractere.digitToInt() * (digitos.length + 1 - index)
     }.sum()
-    val remainder = sum % 11
-    return if (remainder < 2) 0 else 11 - remainder
+
+    val resto = soma % 11
+
+    return if (resto < 2) 0 else 11 - resto
 }
 
 fun main() {
     println("Digite o CPF no formato XXX.XXX.XXX-XX:")
     val cpf = readln()
 
-    if (isValidCpf(cpf)) {
+    if (cpfValido(cpf)) {
         println("O CPF informado é válido.")
     } else {
         println("O CPF informado é inválido.")

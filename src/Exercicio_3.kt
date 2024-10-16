@@ -1,7 +1,7 @@
 fun readUserChoice() : String {
     var opcaoEscolhida : String
 
-    print("Digite o que quer jogar.\npe- Para pedra\npa- Para papel\nte-Para tesoura")
+    println("Digite o que quer jogar.\npe- Para pedra\npa- Para papel\nte- Para tesoura")
 
     opcaoEscolhida = readln()
 
@@ -30,5 +30,4 @@ fun main() {
     else {
         print("Jogador 2 venceu!")
     }
-
 }
